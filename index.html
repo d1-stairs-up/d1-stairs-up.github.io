@@ -473,40 +473,27 @@
       <section id="comparison">
         <h2 class="section-title">对比实验</h2>
         <p class="section-desc">
-          本部分展示所提出方法与基线方法在相同楼梯场景中的实机表现差异，重点关注机器人在台阶过渡阶段的机体稳定性、动作连续性以及整体任务完成质量。
+          本部分重点展示从仿真训练到真实部署的关键视频结果。相比单纯给出最终成功画面，这里更关注策略在楼梯场景中的动作连续性、姿态稳定性，以及 Sim-to-Real 迁移过程中控制品质是否保持一致。
         </p>
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">与基线方法的实机上楼梯对比</h3>
+            <h3 class="group-title">MuJoCo 仿真中的策略表现</h3>
             <p class="group-text">
-              在相同楼梯环境和相同初始条件下，对比基线方法与本文方法的实际表现。可以观察机器人在接触切换时的姿态变化、动作平滑性以及任务完成能力上的差异。
+              该视频展示了策略在 MuJoCo 环境中的自主上楼梯效果。可以重点观察机器人在轮足协同、台阶接触切换和机体前向推进过程中的动作节奏。仿真阶段的目标不是只让机器人“上去”，而是学习一种能够在离散接触条件下保持平滑、可迁移的控制模式。
             </p>
           </div>
 
           <div class="media-grid">
             <div class="media-card">
               <div class="media-box">
-                <span class="media-label">Baseline</span>
-                <video src="videos/comparison_baseline.mp4" controls muted playsinline loop></video>
+                <span class="media-label">MuJoCo Demo</span>
+                <video src="videos/mujoco_demo.mp4" controls muted playsinline loop></video>
               </div>
               <div class="media-content">
-                <h4 class="media-title">基线方法</h4>
+                <h4 class="media-title">仿真环境中的楼梯策略</h4>
                 <p class="media-desc">
-                  基线方法在上楼梯过程中更容易出现姿态波动、接触切换不稳定或动作不连续的问题，在复杂台阶过渡阶段表现出较弱的鲁棒性。
-                </p>
-              </div>
-            </div>
-
-            <div class="media-card">
-              <div class="media-box">
-                <span class="media-label">Ours</span>
-                <video src="videos/comparison_ours.mp4" controls muted playsinline loop></video>
-              </div>
-              <div class="media-content">
-                <h4 class="media-title">本文方法</h4>
-                <p class="media-desc">
-                  本文方法在真实楼梯场景中表现出更好的动作连续性与机体稳定性，能够更平稳地完成台阶过渡，并实现稳定自主上楼梯。
+                  从视频中可以看到，策略在仿真阶段已经形成较稳定的接触切换逻辑和推进节奏，能够在台阶过渡时保持机体姿态相对平顺。这说明约束强化学习不仅提高了任务完成能力，也在训练阶段提前塑造了对真实硬件友好的动作模式。
                 </p>
               </div>
             </div>
@@ -515,51 +502,16 @@
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">不同楼梯条件下的对比结果</h3>
+            <h3 class="group-title">仿真视频所反映的算法特性</h3>
             <p class="group-text">
-              进一步展示方法在不同台阶几何条件、不同初始状态或不同环境设置下的表现，以体现策略的泛化能力与实机适应性。
+              结合视频与训练曲线可以更直观地理解算法行为。楼梯任务中的难点不在于单步抬升，而在于连续多步台阶中的接触切换、速度保持和机体姿态管理。视频中的连续上楼梯过程说明策略在这些目标之间实现了较好的平衡。
             </p>
           </div>
 
-          <div class="media-grid three">
-            <div class="media-card">
-              <div class="media-box video-tall">
-                <span class="media-label">Case 1</span>
-                <video src="videos/comparison_case1.mp4" controls muted playsinline loop></video>
-              </div>
-              <div class="media-content">
-                <h4 class="media-title">标准楼梯场景</h4>
-                <p class="media-desc">
-                  展示机器人在标准楼梯环境中的运动效果，用于对比不同方法在常规条件下的表现差异。
-                </p>
-              </div>
-            </div>
-
-            <div class="media-card">
-              <div class="media-box video-tall">
-                <span class="media-label">Case 2</span>
-                <video src="videos/comparison_case2.mp4" controls muted playsinline loop></video>
-              </div>
-              <div class="media-content">
-                <h4 class="media-title">更具挑战性的台阶条件</h4>
-                <p class="media-desc">
-                  展示在更高难度的台阶过渡条件下，本文方法相较基线在稳定性与成功率上的优势。
-                </p>
-              </div>
-            </div>
-
-            <div class="media-card">
-              <div class="media-box video-tall">
-                <span class="media-label">Result</span>
-                <img src="images/comparison_result.png" alt="对比实验结果图">
-              </div>
-              <div class="media-content">
-                <h4 class="media-title">对比结果可视化</h4>
-                <p class="media-desc">
-                  可替换为成功率统计、关键帧对比图、机体姿态变化曲线或其他定量结果，用于补充视频展示。
-                </p>
-              </div>
-            </div>
+          <div class="highlight-box">
+            <p>
+              <strong>视频分析：</strong>仿真视频中较为稳定的轮足节奏、连续推进以及较少的突兀姿态修正，说明策略学到的并非单纯依赖偶然接触的“投机动作”，而是更结构化的运动模式。这与消融部分的结论一致，即约束项负责压制危险动作，Barlow Twins 改善状态编码，而 NP3O 则在优化过程中维持了更好的训练稳定性。
+            </p>
           </div>
         </div>
       </section>
@@ -680,40 +632,27 @@
       <section id="realworld">
         <h2 class="section-title">实机实验</h2>
         <p class="section-desc">
-          本部分展示方法在真实双轮足机器人上的部署效果，包括不同视角、不同楼梯条件以及多种实际场景下的自主上楼梯实验，用于验证策略的实用性与鲁棒性。
+          本部分展示训练策略部署到真实 D1 双轮足机器人后的执行效果。这里最重要的不只是“能够完成任务”，而是策略在真实硬件、真实接触摩擦和真实传感噪声下，是否仍能保持与仿真阶段一致的动作规律和稳定性。
         </p>
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">标准楼梯场景实机验证</h3>
+            <h3 class="group-title">真实机器人上的部署结果</h3>
             <p class="group-text">
-              在真实标准楼梯中验证策略的稳定性与可执行性，从不同拍摄视角展示机器人完成自主上楼梯任务的全过程。
+              该视频展示了策略在真实 D1 双轮足机器人上的上楼梯表现。与仿真阶段相比，真实系统面临执行器延迟、接触不确定性、台阶摩擦差异以及机体扰动等问题，因此这部分视频能够更直接说明算法是否具备实际部署价值。
             </p>
           </div>
 
           <div class="media-grid">
             <div class="media-card">
               <div class="media-box">
-                <span class="media-label">Real Test 1</span>
-                <video src="videos/real_stair_1.mp4" controls muted playsinline loop></video>
+                <span class="media-label">Real Robot Demo</span>
+                <video src="videos/real_robot_demo.mp4" controls muted playsinline loop></video>
               </div>
               <div class="media-content">
-                <h4 class="media-title">正视角实机实验</h4>
+                <h4 class="media-title">D1 实机自主上楼梯</h4>
                 <p class="media-desc">
-                  展示机器人从起始位置到连续完成上楼梯任务的全过程，重点体现运动连续性与整体稳定性。
-                </p>
-              </div>
-            </div>
-
-            <div class="media-card">
-              <div class="media-box">
-                <span class="media-label">Real Test 2</span>
-                <video src="videos/real_stair_2.mp4" controls muted playsinline loop></video>
-              </div>
-              <div class="media-content">
-                <h4 class="media-title">侧视角实机实验</h4>
-                <p class="media-desc">
-                  从侧面观察轮足配合与机体姿态变化，更直观展示策略在接触切换过程中的平稳控制效果。
+                  视频表明策略在实机上仍能保持较好的动作连续性和机体稳定性，机器人能够完成连续台阶过渡，而不是依赖单次冲击式动作通过障碍。对双轮足平台而言，这意味着策略已经具备一定的实用部署能力，而不仅仅停留在仿真中可行。
                 </p>
               </div>
             </div>
@@ -722,51 +661,16 @@
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">不同条件下的实机效果</h3>
+            <h3 class="group-title">实机视频所体现的迁移效果</h3>
             <p class="group-text">
-              展示机器人在多种真实条件下的上楼梯表现，包括不同楼梯结构、不同起始状态或不同环境设置，以体现方法的泛化性能。
+              从实机视频中可以重点观察三个方面：一是机体在每一级台阶切换时是否出现过大的俯仰或侧摆；二是轮足动作是否连续、是否存在明显抖振；三是推进节奏是否稳定。若这些特征与仿真阶段保持一致，就说明 Sim-to-Real 迁移是有效的。
             </p>
           </div>
 
-          <div class="media-grid three">
-            <div class="media-card">
-              <div class="media-box">
-                <span class="media-label">Scene A</span>
-                <video src="videos/real_scene_a.mp4" controls muted playsinline loop></video>
-              </div>
-              <div class="media-content">
-                <h4 class="media-title">场景 A</h4>
-                <p class="media-desc">
-                  展示机器人在一种典型真实楼梯条件下的自主上楼梯效果。
-                </p>
-              </div>
-            </div>
-
-            <div class="media-card">
-              <div class="media-box">
-                <span class="media-label">Scene B</span>
-                <video src="videos/real_scene_b.mp4" controls muted playsinline loop></video>
-              </div>
-              <div class="media-content">
-                <h4 class="media-title">场景 B</h4>
-                <p class="media-desc">
-                  展示在另一实际楼梯场景下策略的适应能力与部署效果。
-                </p>
-              </div>
-            </div>
-
-            <div class="media-card">
-              <div class="media-box">
-                <span class="media-label">Snapshot</span>
-                <img src="images/real_snapshot.png" alt="实机实验截图">
-              </div>
-              <div class="media-content">
-                <h4 class="media-title">实机关键帧</h4>
-                <p class="media-desc">
-                  通过关键帧图像展示机器人在台阶过渡阶段的典型动作与姿态变化。
-                </p>
-              </div>
-            </div>
+          <div class="highlight-box">
+            <p>
+              <strong>实机分析：</strong>真实机器人视频中能够观察到，策略在每一级台阶前后的动作切换相对平滑，机体没有出现持续放大的姿态震荡，说明训练中引入的安全约束和动作惩罚并未牺牲通过能力，反而帮助策略形成了更适合真实系统的控制风格。这也是约束强化学习相较于单纯追求回报最大化方法的一个核心优势。
+            </p>
           </div>
         </div>
 
