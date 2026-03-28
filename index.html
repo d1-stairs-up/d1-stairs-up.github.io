@@ -567,53 +567,53 @@
       <section id="ablation">
         <h2 class="section-title">消融实验</h2>
         <p class="section-desc">
-          本部分分析关键模块对最终性能的影响，通过移除或替换不同设计，考察各组成部分在楼梯场景中的作用，包括安全约束机制、特权学习结构以及表示学习模块等。
+          本部分基于训练曲线与诊断指标分析关键模块对最终性能的影响。重点围绕 NP3O 约束优化、Barlow Twins 表征学习，以及约束项对训练稳定性和动作质量的调节作用展开。
         </p>
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">关键模块消融对实机表现的影响</h3>
+            <h3 class="group-title">关键模块对地形通过能力的影响</h3>
             <p class="group-text">
-              消融实验围绕 NP3O 约束优化、非对称 Actor-Critic 设计以及 Barlow Twins 表示学习模块展开，对比不同版本策略在真实楼梯场景中的稳定性与任务完成效果。
+              从 terrain level 曲线可以观察不同算法组合在训练过程中的地形适应能力。完整方法 NP3O+BT 在中后期保持了更稳定的增长趋势，最终达到较高的地形等级；相较于去除 Barlow Twins 的 NP3O 版本，加入表征学习后策略在复杂地形中的提升更平滑，说明更好的状态表征有助于提高样本利用效率与后期泛化能力。
             </p>
           </div>
 
           <div class="media-grid three">
             <div class="media-card">
               <div class="media-box">
-                <span class="media-label">w/o Constraint</span>
-                <video src="videos/ablation_a.mp4" controls muted playsinline loop></video>
+                <span class="media-label">Terrain Levels</span>
+                <img src="images/ablation_terrain_levels.png" alt="不同算法在 terrain level 上的训练曲线">
               </div>
               <div class="media-content">
-                <h4 class="media-title">去除安全约束设计</h4>
+                <h4 class="media-title">地形等级训练曲线</h4>
                 <p class="media-desc">
-                  去除基于 NP3O 的关节安全硬约束后，策略在楼梯接触切换阶段更容易出现不稳定动作，安全性与实机可执行性下降。
+                  曲线对比显示，HIMLoco 在较低难度地形附近较早饱和；PPO 系方法虽然部分阶段上升较快，但后期波动更明显。相比之下，NP3O+BT 在复杂地形上的上升过程更平稳，体现出约束优化和高质量表征对训练稳定性的共同作用。
                 </p>
               </div>
             </div>
 
             <div class="media-card">
               <div class="media-box">
-                <span class="media-label">w/o BT</span>
-                <video src="videos/ablation_b.mp4" controls muted playsinline loop></video>
+                <span class="media-label">Barlow Twins</span>
+                <img src="images/ablation_barlow_metrics.png" alt="Barlow Twins 表征学习指标">
               </div>
               <div class="media-content">
-                <h4 class="media-title">去除 Barlow Twins 表示学习</h4>
+                <h4 class="media-title">Barlow Twins 表征分析</h4>
                 <p class="media-desc">
-                  移除自监督表示学习模块后，策略对复杂楼梯状态的表征能力减弱，表现为鲁棒性下降和动作连续性变差。
+                  Barlow Twins 的 off-diagonal 项持续下降、effective rank 持续上升，说明特征冗余被逐步压缩，潜在表示维度被更充分利用；同时 latent std 的均值和最小值维持在合理区间，表明表征没有发生塌缩。这说明 BT 模块确实在训练中学到了更解耦、更稳定的状态编码。
                 </p>
               </div>
             </div>
 
             <div class="media-card">
               <div class="media-box">
-                <span class="media-label">Full Model</span>
-                <video src="videos/ablation_full.mp4" controls muted playsinline loop></video>
+                <span class="media-label">Penalty Group A</span>
+                <img src="images/ablation_reward_group_1.png" alt="关节与接触相关训练指标">
               </div>
               <div class="media-content">
-                <h4 class="media-title">完整模型</h4>
+                <h4 class="media-title">接触与关节约束诊断</h4>
                 <p class="media-desc">
-                  完整模型结合约束优化、非对称 Actor-Critic 和 Barlow Twins 后，在实机上表现出更好的平稳性、鲁棒性和自主上楼梯能力。
+                  该组指标覆盖 joint acceleration、joint power 与 no-contact 等训练项。随着训练推进，各项约束惩罚逐渐进入更稳定区间，说明策略在提高通过能力的同时，也逐步学会抑制剧烈关节动作与无效接触行为。
                 </p>
               </div>
             </div>
@@ -622,38 +622,57 @@
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">定量与图像化分析</h3>
+            <h3 class="group-title">动作平滑性与约束行为分析</h3>
             <p class="group-text">
-              除视频外，也可以通过统计图和关键帧进一步展示各模块带来的性能变化，例如任务成功率、姿态波动幅度、轨迹平滑程度等指标。
+              除最终通过能力外，训练过程中的动作变化率、机体高度、速度跟踪误差和非期望接触等指标，也能更直接反映算法为何能够迁移到真实机器人上。整体来看，约束强化学习并不是单纯追求更快的地形升级，而是在稳定性、安全性和可部署性之间取得更好的平衡。
             </p>
           </div>
 
-          <div class="media-grid">
+          <div class="media-grid three">
             <div class="media-card">
               <div class="media-box">
-                <span class="media-label">Chart</span>
-                <img src="images/ablation_chart.png" alt="消融实验统计图">
+                <span class="media-label">Penalty Group B</span>
+                <img src="images/ablation_reward_group_2.png" alt="动作平滑性与机体高度相关训练指标">
               </div>
               <div class="media-content">
-                <h4 class="media-title">消融统计图</h4>
+                <h4 class="media-title">动作平滑性与机体姿态</h4>
                 <p class="media-desc">
-                  可展示不同模型在成功率、平均速度、姿态稳定性或其他核心指标上的量化对比结果。
+                  action rate、角速度跟踪和 base height 等曲线反映了控制策略对动作平滑性与机体姿态的调节能力。完整方法在这些量上通常表现出更温和的收敛过程，说明其生成的控制信号更连续，更适合真实硬件执行。
                 </p>
               </div>
             </div>
 
             <div class="media-card">
               <div class="media-box">
-                <span class="media-label">Frames</span>
-                <img src="images/ablation_frames.png" alt="消融实验关键帧对比图">
+                <span class="media-label">Penalty Group C</span>
+                <img src="images/ablation_reward_group_3.png" alt="速度跟踪和非期望接触相关训练指标">
               </div>
               <div class="media-content">
-                <h4 class="media-title">关键帧对比</h4>
+                <h4 class="media-title">速度跟踪与非期望接触</h4>
                 <p class="media-desc">
-                  展示不同模型在台阶过渡关键时刻的机器人姿态和动作差异，以更直观体现各模块的贡献。
+                  从线速度跟踪、undesired contacts 和 wheel velocity penalty 等指标可以看出，策略在学习推进能力的同时，也在逐步减少非期望碰撞和不稳定轮体行为。这是后续实现实机稳定上楼梯的重要前提。
                 </p>
               </div>
             </div>
+
+            <div class="media-card">
+              <div class="media-box">
+                <span class="media-label">Conclusion</span>
+                <img src="images/ablation_terrain_levels.png" alt="消融实验结论图">
+              </div>
+              <div class="media-content">
+                <h4 class="media-title">算法分析结论</h4>
+                <p class="media-desc">
+                  综合训练曲线可以得到一个比较清晰的结论：NP3O 提供了对安全约束与训练稳定性的基础保障，Barlow Twins 提升了状态表征质量和后期泛化能力，而各类约束项共同抑制了高频动作、异常接触和姿态失稳。正是这三个部分协同作用，才让策略不仅“能学会”，而且“能安全地迁移到真实 D1 机器人上”。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="highlight-box">
+            <p>
+              <strong>分析总结：</strong>如果只看单一任务进度指标，部分无约束或弱约束方法在早期可能上升更快；但结合表征质量、动作平滑性、接触稳定性和惩罚项收敛情况来看，完整方法在训练后期展现出更均衡的性能结构。这种“更稳而不是只更快”的优化特性，是双轮足机器人在真实楼梯场景中成功部署的关键。
+            </p>
           </div>
         </div>
       </section>
@@ -759,7 +778,7 @@
       </section>
 
       <div class="footer">
-        最后更新：2026-03-21 · D1 双轮足机器人自主上楼梯项目展示页
+        最后更新：2026-03-29 · D1 双轮足机器人自主上楼梯项目展示页
       </div>
 
     </main>
