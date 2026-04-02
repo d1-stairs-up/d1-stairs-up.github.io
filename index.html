@@ -1149,6 +1149,36 @@
             </div>
           </div>
 
+          <h4 style="margin: 32px 0 16px; font-size: 1rem; color: var(--text-primary); font-weight: 600;">3.4 关节限制遵守情况实测（Sim-to-Real 关键指标）</h4>
+          <div class="media-grid">
+            <div class="media-card">
+              <div class="media-box chart">
+                <span class="media-label" style="background: #dc2626;">PPO 测试</span>
+                <img src="images/ppo_test.png" alt="PPO 关节限制测试">
+              </div>
+              <div class="media-content">
+                <h4 class="media-title">PPO：频繁超出关节限制</h4>
+                <div class="media-desc" style="line-height: 1.7;">
+                  <div style="margin-bottom: 6px;"><strong style="color: #dc2626;">问题</strong>：小腿关节（calf joint）频繁超出软限制（虚线）</div>
+                  <div><strong style="color: #dc2626;">后果</strong>：实机部署时会导致电机过载、机械损伤</div>
+                </div>
+              </div>
+            </div>
+            <div class="media-card">
+              <div class="media-box chart">
+                <span class="media-label" style="background: #2563eb;">NP3O 测试</span>
+                <img src="images/np3o_test.png" alt="NP3O 关节限制测试">
+              </div>
+              <div class="media-content">
+                <h4 class="media-title">NP3O：严格遵守关节限制</h4>
+                <div class="media-desc" style="line-height: 1.7;">
+                  <div style="margin-bottom: 6px;"><strong style="color: #2563eb;">优势</strong>：小腿关节始终保持在限制范围内</div>
+                  <div><strong style="color: #2563eb;">意义</strong>：实机部署安全可控，硬件保护良好</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="highlight-box" style="margin-top: 32px;">
             <h4 style="margin: 0 0 16px 0; font-size: 1.1rem; color: var(--text-primary);">综合分析：为什么 PPO w/o BT 虽然最高但不可行？</h4>
             
