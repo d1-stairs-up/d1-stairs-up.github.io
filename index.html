@@ -825,7 +825,7 @@
 
         <div class="highlight-box">
           <p>
-            <strong>方法概述：</strong>项目采用基于 NP3O 的约束强化学习框架，将关节安全限制作为训练中的硬约束进行优化；在策略结构上，使用非对称 Actor-Critic，让 critic 利用训练阶段的特权信息提升价值估计质量，而 actor 仅依赖部署时可获得观测进行决策；同时引入 Barlow Twins 自监督学习增强状态表征能力，提升策略在复杂楼梯场景下的鲁棒性与泛化性能。
+            <strong>方法概述：</strong>项目采用基于 NP3O 的约束强化学习框架，将关节安全限制作为训练中的硬约束进行优化。在策略结构上，使用非对称 Actor-Critic，让 critic 利用训练阶段的特权信息提升价值估计质量，而 actor 仅依赖部署时可获得观测进行决策。同时引入 Barlow Twins 自监督学习增强状态表征能力，提升策略在复杂楼梯场景下的鲁棒性与泛化性能。
           </p>
         </div>
       </section>
@@ -912,7 +912,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">五种算法地形等级曲线</h4>
-                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>最先到达最高level且最终level最高；<strong>NP3O+BT（蓝线）</strong>上升较慢但最终接近；<strong>HIMLoco（紫线）</strong>最早饱和于低level。</p>
+                <div class="media-desc" style="line-height: 1.7;"><div style="margin-bottom: 4px;"><strong style="color: #dc2626;">PPO w/o BT（红线）</strong>：最先到达最高 level 且最终 level 最高</div><div style="margin-bottom: 4px;"><strong style="color: #2563eb;">NP3O+BT（蓝线）</strong>：上升较慢但最终接近</div><div><strong style="color: #9333ea;">HIMLoco（紫线）</strong>：最早饱和于低 level</div></div>
               </div>
             </div>
           </div>
@@ -1009,8 +1009,8 @@
           <div class="highlight-box" style="margin-top: 24px;">
             <p>
               <strong>BT 有效性总结：</strong>对比 NP3O（无 BT）和 PPO+BT（有 BT 但无约束），加入 BT 后：
-              (1) 样本效率提升 —— NP3O+BT 比 NP3O 收敛快约 40%；
-              (2) 泛化能力增强 —— PPO+BT 虽然最终不如 NP3O+BT，但比纯 PPO 稳定得多；
+              (1) 样本效率提升 —— NP3O+BT 比 NP3O 收敛快约 40%。
+              (2) 泛化能力增强 —— PPO+BT 虽然最终不如 NP3O+BT，但比纯 PPO 稳定得多。
               (3) 表征质量验证 —— 上述指标证明 BT 成功学习到解耦、丰富、无坍缩的状态表征。
             </p>
           </div>
@@ -1034,7 +1034,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">轮子关节加速度 L2</h4>
-                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>和<strong>PPO+BT（绿线）</strong>：惩罚值高且波动大，轮子运动剧烈；<strong>NP3O w/o BT（橙线）</strong>和<strong>NP3O+BT（蓝线）</strong>：惩罚快速下降并保持低位，轮子运动平滑可控。</p>
+                <div class="media-desc" style="line-height: 1.7;"><div style="margin-bottom: 6px;"><strong style="color: #dc2626;">PPO w/o BT</strong> 和 <strong style="color: #dc2626;">PPO+BT</strong>：惩罚值高且波动大，轮子运动剧烈</div><div><strong style="color: #2563eb;">NP3O w/o BT</strong> 和 <strong style="color: #2563eb;">NP3O+BT</strong>：惩罚快速下降并保持低位，轮子运动平滑可控</div></div>
               </div>
             </div>
             <div class="media-card">
@@ -1044,7 +1044,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">关节功率消耗</h4>
-                <p class="media-desc"><strong>PPO 系列</strong>：功耗显著偏高，为追求速度采用激进高耗能策略；<strong>NP3O 系列</strong>：功耗控制更优，策略更节能。</p>
+                <div class="media-desc" style="line-height: 1.7;"><div style="margin-bottom: 6px;"><strong style="color: #dc2626;">PPO 系列</strong>：功耗显著偏高，为追求速度采用激进高耗能策略</div><div><strong style="color: #2563eb;">NP3O 系列</strong>：功耗控制更优，策略更节能</div></div>
               </div>
             </div>
             <div class="media-card">
@@ -1054,7 +1054,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">双脚离地惩罚</h4>
-                <p class="media-desc"><strong>PPO 系列</strong>：频繁双脚离地，接触切换不稳定；<strong>NP3O 系列</strong>：保持持续接触，轮足协调更稳定。</p>
+                <div class="media-desc" style="line-height: 1.7;"><div style="margin-bottom: 6px;"><strong style="color: #dc2626;">PPO 系列</strong>：频繁双脚离地，接触切换不稳定</div><div><strong style="color: #2563eb;">NP3O 系列</strong>：保持持续接触，轮足协调更稳定</div></div>
               </div>
             </div>
           </div>
@@ -1068,7 +1068,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">动作变化率 L2</h4>
-                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>和<strong>PPO+BT（绿线）</strong>：动作 rate 持续高位，控制信号抖动大；<strong>NP3O w/o BT（橙线）</strong>和<strong>NP3O+BT（蓝线）</strong>：动作平滑变化，更适合硬件执行。</p>
+                <div class="media-desc" style="line-height: 1.7;"><div style="margin-bottom: 6px;"><strong style="color: #dc2626;">PPO w/o BT</strong> 和 <strong style="color: #dc2626;">PPO+BT</strong>：动作 rate 持续高位，控制信号抖动大</div><div><strong style="color: #2563eb;">NP3O w/o BT</strong> 和 <strong style="color: #2563eb;">NP3O+BT</strong>：动作平滑变化，更适合硬件执行</div></div>
               </div>
             </div>
             <div class="media-card">
@@ -1164,7 +1164,7 @@
               
               <div style="margin-bottom: 14px; padding: 12px 16px; background: rgba(248, 250, 252, 0.8); border-radius: 8px; border-left: 3px solid #ef4444;">
                 <strong style="color: #dc2626; display: block; margin-bottom: 6px;">2. 动作平滑性</strong>
-                <span style="color: var(--text-secondary);">PPO 的动作变化率波动剧烈，控制信号抖动大；机体晃动更剧烈，姿态不稳定。</span>
+                <span style="color: var(--text-secondary);">PPO 的动作变化率波动剧烈，控制信号抖动大。机体晃动更剧烈，姿态不稳定。</span>
               </div>
               
               <div style="margin-bottom: 14px; padding: 12px 16px; background: rgba(248, 250, 252, 0.8); border-radius: 8px; border-left: 3px solid #ef4444;">
