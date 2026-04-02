@@ -425,7 +425,7 @@
 
       <nav class="nav-bar">
         <a class="nav-link" href="#overview">项目简介</a>
-        <a class="nav-link" href="#comparison">对比实验</a>
+        <a class="nav-link" href="#comparison">仿真视频</a>
         <a class="nav-link" href="#ablation">消融实验</a>
         <a class="nav-link" href="#realworld">实机实验</a>
       </nav>
@@ -471,29 +471,29 @@
       </section>
 
       <section id="comparison">
-        <h2 class="section-title">对比实验</h2>
+        <h2 class="section-title">仿真视频</h2>
         <p class="section-desc">
-          本部分重点展示从仿真训练到真实部署的关键视频结果。相比单纯给出最终成功画面，这里更关注策略在楼梯场景中的动作连续性、姿态稳定性，以及 Sim-to-Real 迁移过程中控制品质是否保持一致。
+          本部分展示策略在 Isaac Lab 中的上楼梯视频。这里主要用来说明训练环境中的任务形态和策略最终学到的运动效果，不做方法对比，也不过度解读视频本身。
         </p>
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">MuJoCo 仿真中的策略表现</h3>
+            <h3 class="group-title">Isaac Lab 中的上楼梯结果</h3>
             <p class="group-text">
-              该视频展示了策略在 MuJoCo 环境中的自主上楼梯效果。可以重点观察机器人在轮足协同、台阶接触切换和机体前向推进过程中的动作节奏。仿真阶段的目标不是只让机器人“上去”，而是学习一种能够在离散接触条件下保持平滑、可迁移的控制模式。
+              视频记录的是策略在 Isaac Lab 训练环境中的上楼梯过程。可以直接看到机器人在连续台阶上的运动状态，包括起步、台阶切换和通过后的姿态变化。这一部分主要用于对应训练场景本身，与后面的实机视频形成直观参照。
             </p>
           </div>
 
           <div class="media-grid">
             <div class="media-card">
               <div class="media-box">
-                <span class="media-label">MuJoCo Demo</span>
-                <video src="videos/mujoco_demo.mp4" controls muted playsinline loop></video>
+                <span class="media-label">Isaac Lab Demo</span>
+                <video src="videos/isaaclab_demo.mp4" controls muted playsinline loop></video>
               </div>
               <div class="media-content">
-                <h4 class="media-title">仿真环境中的楼梯策略</h4>
+                <h4 class="media-title">Isaac Lab 仿真结果</h4>
                 <p class="media-desc">
-                  从视频中可以看到，策略在仿真阶段已经形成较稳定的接触切换逻辑和推进节奏，能够在台阶过渡时保持机体姿态相对平顺。这说明约束强化学习不仅提高了任务完成能力，也在训练阶段提前塑造了对真实硬件友好的动作模式。
+                  这段视频展示的是最终训练策略在仿真中的执行效果。页面保留它的目的，是让读者先看到训练环境中的任务表现，再去看后续的实机部署结果。
                 </p>
               </div>
             </div>
@@ -502,15 +502,15 @@
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">仿真视频所反映的算法特性</h3>
+            <h3 class="group-title">这一部分在页面中的作用</h3>
             <p class="group-text">
-              结合视频与训练曲线可以更直观地理解算法行为。楼梯任务中的难点不在于单步抬升，而在于连续多步台阶中的接触切换、速度保持和机体姿态管理。视频中的连续上楼梯过程说明策略在这些目标之间实现了较好的平衡。
+              这部分不单独证明算法优劣，而是用于补充说明训练目标与仿真任务设置。真正支撑方法有效性的，仍然是后面的消融曲线和实机结果。
             </p>
           </div>
 
           <div class="highlight-box">
             <p>
-              <strong>视频分析：</strong>仿真视频中较为稳定的轮足节奏、连续推进以及较少的突兀姿态修正，说明策略学到的并非单纯依赖偶然接触的“投机动作”，而是更结构化的运动模式。这与消融部分的结论一致，即约束项负责压制危险动作，Barlow Twins 改善状态编码，而 NP3O 则在优化过程中维持了更好的训练稳定性。
+              <strong>说明：</strong>这里给出 Isaac Lab 视频，主要是为了展示训练环境中的任务形式和最终策略的可视化效果。关于算法本身的分析，更多依据的是后面的训练曲线、表征指标和实机部署表现。
             </p>
           </div>
         </div>
@@ -632,14 +632,14 @@
       <section id="realworld">
         <h2 class="section-title">实机实验</h2>
         <p class="section-desc">
-          本部分展示训练策略部署到真实 D1 双轮足机器人后的执行效果。这里最重要的不只是“能够完成任务”，而是策略在真实硬件、真实接触摩擦和真实传感噪声下，是否仍能保持与仿真阶段一致的动作规律和稳定性。
+          本部分展示同一套训练策略部署到真实 D1 双轮足机器人后的执行结果。重点是给出实际运行效果，而不是对视频本身做过多包装性的描述。
         </p>
 
         <div class="experiment-group">
           <div class="group-header">
             <h3 class="group-title">真实机器人上的部署结果</h3>
             <p class="group-text">
-              该视频展示了策略在真实 D1 双轮足机器人上的上楼梯表现。与仿真阶段相比，真实系统面临执行器延迟、接触不确定性、台阶摩擦差异以及机体扰动等问题，因此这部分视频能够更直接说明算法是否具备实际部署价值。
+              该视频记录了策略在真实 D1 双轮足机器人上的上楼梯过程。它对应的是前面 Isaac Lab 训练任务在真实平台上的部署结果，用来说明策略确实能够落到实机上执行。
             </p>
           </div>
 
@@ -652,7 +652,7 @@
               <div class="media-content">
                 <h4 class="media-title">D1 实机自主上楼梯</h4>
                 <p class="media-desc">
-                  视频表明策略在实机上仍能保持较好的动作连续性和机体稳定性，机器人能够完成连续台阶过渡，而不是依赖单次冲击式动作通过障碍。对双轮足平台而言，这意味着策略已经具备一定的实用部署能力，而不仅仅停留在仿真中可行。
+                  这段视频展示的是最终部署效果。相比仿真结果，它更直接反映了方法在真实硬件上的可执行性，也是整个项目最核心的结果之一。
                 </p>
               </div>
             </div>
@@ -663,13 +663,13 @@
           <div class="group-header">
             <h3 class="group-title">实机视频所体现的迁移效果</h3>
             <p class="group-text">
-              从实机视频中可以重点观察三个方面：一是机体在每一级台阶切换时是否出现过大的俯仰或侧摆；二是轮足动作是否连续、是否存在明显抖振；三是推进节奏是否稳定。若这些特征与仿真阶段保持一致，就说明 Sim-to-Real 迁移是有效的。
+              仿真和实机视频放在同一页面里，主要是为了让训练结果和部署结果能够对应起来看。页面想表达的是：策略不是只在仿真里有效，而是最终完成了真实机器人的上楼梯部署。
             </p>
           </div>
 
           <div class="highlight-box">
             <p>
-              <strong>实机分析：</strong>真实机器人视频中能够观察到，策略在每一级台阶前后的动作切换相对平滑，机体没有出现持续放大的姿态震荡，说明训练中引入的安全约束和动作惩罚并未牺牲通过能力，反而帮助策略形成了更适合真实系统的控制风格。这也是约束强化学习相较于单纯追求回报最大化方法的一个核心优势。
+              <strong>说明：</strong>实机视频的意义在于证明策略完成了从训练环境到真实平台的迁移。更具体的算法贡献和模块作用，仍然通过消融实验部分来说明。
             </p>
           </div>
         </div>
