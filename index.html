@@ -804,15 +804,15 @@
         <div class="section-header">
           <h2 class="section-title">消融实验</h2>
           <p class="section-desc">
-            本部分基于训练曲线与诊断指标分析关键模块对最终性能的影响，重点围绕 NP3O 约束优化、Barlow Twins 表征学习展开。
+            本部分深入分析不同算法在地形通过能力、动作平滑性、约束满足度等多维度指标上的表现。重点解释为什么某些方法地形等级上升快但实际策略不可行，以及 NP3O+BT 如何在性能与可控性之间取得最佳平衡。
           </p>
         </div>
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">关键模块对地形通过能力的影响</h3>
+            <h3 class="group-title">地形通过能力的算法对比分析</h3>
             <p class="group-text">
-              从 terrain level 曲线可以观察不同算法组合在训练过程中的地形适应能力。完整方法 NP3O+BT 在中后期保持了更稳定的增长趋势。
+              <strong>Terrain Level 曲线</strong>反映了策略在训练过程中能够成功通过的地形难度等级。从曲线可以观察到，我们的完整方法 <strong>NP3O+BT</strong> 在约 1500 次迭代后快速上升，最终稳定在高地形等级，明显优于 HIMLoco、PPO+Lag 和 NP3O（无 BT）等基线方法。值得注意的是，PPO 在早期的地形等级上升速度最快，约 1000 次迭代即达到较高水平，但这一现象需要结合其他指标综合分析。
             </p>
           </div>
 
@@ -825,7 +825,7 @@
               <div class="media-content">
                 <h4 class="media-title">地形等级训练曲线</h4>
                 <p class="media-desc">
-                  NP3O+BT 在复杂地形上的上升过程更平稳，体现约束优化和高质量表征对训练稳定性的作用。
+                  NP3O+BT 收敛稳定且最终性能优异；PPO 虽早期上升快但伴随高方差；HIMLoco 较早饱和于低难度地形。
                 </p>
               </div>
             </div>
@@ -851,7 +851,7 @@
               <div class="media-content">
                 <h4 class="media-title">接触与关节约束诊断</h4>
                 <p class="media-desc">
-                  各项约束惩罚逐渐进入稳定区间，策略学会抑制剧烈关节动作与无效接触行为。
+                  PPO 的 joint acceleration 和 joint power 惩罚显著偏高，说明其为追求快速上升采用了激进策略；NP3O+BT 各项约束平稳收敛，体现安全约束的有效性。
                 </p>
               </div>
             </div>
@@ -860,9 +860,9 @@
 
         <div class="experiment-group">
           <div class="group-header">
-            <h3 class="group-title">动作平滑性与约束行为分析</h3>
+            <h3 class="group-title">多维度指标综合对比：为什么 PPO 的策略"奇怪"？</h3>
             <p class="group-text">
-              训练过程中的动作变化率、机体高度、速度跟踪误差等指标，反映算法为何能够迁移到真实机器人上。
+              单纯看地形等级，PPO 似乎表现不错，但深入分析其他关键指标后发现其策略存在明显缺陷。<strong>Penalty Group A（接触与关节约束）</strong>显示，PPO 的 joint acceleration 和 joint power 惩罚显著高于 NP3O 系列方法，说明 PPO 为了快速达到高地形等级，采用了更激进、更耗能的关节动作策略。<strong>Penalty Group B（动作平滑性）</strong>中，PPO 的 action rate 波动剧烈，机体高度控制不稳定，导致运动过程中出现明显的抖动和姿态异常。<strong>Penalty Group C（速度跟踪与非期望接触）</strong>进一步揭示 PPO 存在大量 undesired contacts 和较高的 wheel velocity penalty，表明其轮足协同控制不够协调，容易产生打滑和异常接触。这些指标的恶化直接解释了为什么 PPO 虽然地形等级高，但其策略难以迁移到真实机器人上——它学习了"投机取巧"的模式，而非稳健可控的运动技能。
             </p>
           </div>
 
@@ -875,7 +875,7 @@
               <div class="media-content">
                 <h4 class="media-title">动作平滑性与机体姿态</h4>
                 <p class="media-desc">
-                  完整方法在动作平滑性与机体姿态调节上表现出更温和的收敛过程。
+                  PPO 的 action rate 波动剧烈，机体高度控制不稳定；NP3O+BT 动作变化率平稳、base height 保持稳健，更适合真实硬件执行。
                 </p>
               </div>
             </div>
@@ -888,7 +888,7 @@
               <div class="media-content">
                 <h4 class="media-title">速度跟踪与非期望接触</h4>
                 <p class="media-desc">
-                  策略逐步减少非期望碰撞和不稳定轮体行为，是实机稳定上楼梯的重要前提。
+                  PPO 存在大量 undesired contacts 和较高的 wheel velocity penalty，轮足协同不协调；NP3O+BT 逐步减少异常接触，策略更可控。
                 </p>
               </div>
             </div>
@@ -899,9 +899,9 @@
                 <img src="images/ablation_terrain_levels.png" alt="消融实验结论图">
               </div>
               <div class="media-content">
-                <h4 class="media-title">算法分析结论</h4>
+                <h4 class="media-title">综合对比结论</h4>
                 <p class="media-desc">
-                  NP3O 提供安全约束基础，Barlow Twins 提升表征质量，约束项抑制异常行为。
+                  单纯追求地形等级速度会牺牲动作质量；NP3O+BT 在性能与可控性之间取得最佳平衡，是实现 Sim-to-Real 的关键。
                 </p>
               </div>
             </div>
@@ -909,7 +909,7 @@
 
           <div class="highlight-box">
             <p>
-              <strong>分析总结：</strong>结合表征质量、动作平滑性、接触稳定性和惩罚项收敛情况来看，完整方法在训练后期展现出更均衡的性能结构。这种"更稳而不是只更快"的优化特性，是双轮足机器人在真实楼梯场景中成功部署的关键。
+              <strong>深入分析总结：</strong>消融实验揭示了强化学习中"速度 vs 质量"的权衡关系。PPO 虽然在地形等级上表现最快，但其策略在关节约束、动作平滑性和接触稳定性上均存在明显缺陷——高加速度、高功耗、动作抖动、非期望接触频繁，这些问题的累积导致其策略难以部署到真实硬件。相比之下，NP3O+BT 虽然在早期上升速度略慢于 PPO，但凭借约束优化机制保持了动作的可控性，结合 Barlow Twins 的表征学习提升了样本效率和泛化能力，最终在中后期实现稳定超越。这一结果验证了：对于双轮足机器人这类高动态、高约束系统，单纯追求任务完成速度而忽视动作质量的策略是不可行的；只有在 NP3O 的安全约束框架下，配合高质量的状态表征，才能学习到既高效又可控、可迁移的运动技能。
             </p>
           </div>
         </div>
