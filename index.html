@@ -288,6 +288,55 @@
     section:nth-child(4) { animation-delay: 0.2s; }
     section:nth-child(5) { animation-delay: 0.25s; }
     section:nth-child(6) { animation-delay: 0.3s; }
+    section:nth-child(7) { animation-delay: 0.35s; }
+
+    /* Parameter Tabs */
+    .param-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 4px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .param-tab {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .param-tab:hover {
+      color: var(--primary);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .param-tab.active {
+      color: var(--primary);
+      background: #ffffff;
+      border-color: rgba(59, 130, 246, 0.2);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .param-content {
+      position: relative;
+    }
+
+    .param-panel {
+      display: none;
+    }
+
+    .param-panel.active {
+      display: block;
+    }
 
     @keyframes fadeInUp {
       to {
@@ -700,6 +749,7 @@
         <a class="nav-link" href="#comparison">仿真视频</a>
         <a class="nav-link" href="#ablation">消融实验</a>
         <a class="nav-link" href="#realworld">实机实验</a>
+        <a class="nav-link" href="#params">实验参数</a>
       </nav>
 
       <section id="overview">
@@ -980,6 +1030,43 @@
         </div>
       </section>
 
+      <section id="params">
+        <div class="section-header">
+          <h2 class="section-title">实验配置与参数细节</h2>
+          <p class="section-desc">
+            本部分详细展示训练过程中使用的奖励函数、代价函数、域随机化和终止条件等关键参数配置。
+          </p>
+        </div>
+
+        <div class="param-tabs">
+          <button class="param-tab active" data-tab="reward">Reward Terms</button>
+          <button class="param-tab" data-tab="cost">Cost Terms</button>
+          <button class="param-tab" data-tab="domain">Domain Randomization</button>
+          <button class="param-tab" data-tab="termination">Termination Conditions</button>
+        </div>
+
+        <div class="param-content">
+          <div class="param-panel active" id="reward-panel">
+            <iframe src="MMX/active_reward_terms_table_cn.html" frameborder="0" style="width:100%;height:600px;border-radius:12px;border:1px solid var(--border);"></iframe>
+          </div>
+          <div class="param-panel" id="cost-panel">
+            <iframe src="MMX/active_cost_terms_table_cn.html" frameborder="0" style="width:100%;height:320px;border-radius:12px;border:1px solid var(--border);"></iframe>
+          </div>
+          <div class="param-panel" id="domain-panel">
+            <iframe src="MMX/domain_randomization_table.html" frameborder="0" style="width:100%;height:650px;border-radius:12px;border:1px solid var(--border);"></iframe>
+          </div>
+          <div class="param-panel" id="termination-panel">
+            <iframe src="MMX/termination_conditions_table.html" frameborder="0" style="width:100%;height:280px;border-radius:12px;border:1px solid var(--border);"></iframe>
+          </div>
+        </div>
+
+        <div class="highlight-box" style="margin-top:24px;">
+          <p>
+            <strong>参数设计说明：</strong>上述参数配置经过大量实验调优，平衡了任务完成能力、动作平滑性和硬件安全性。Reward Terms 中速度跟踪和姿态稳定为主目标，轮腿协调和平滑性为辅助目标；Cost Terms 通过 NP3O 约束优化框架将关节限制、力矩限制等作为硬约束处理；Domain Randomization 覆盖了接触物理、质量惯性、执行器参数等关键维度，确保策略的鲁棒性和迁移能力；Termination Conditions 区分硬终止（失败）和软终止（正常结束），配合相应的惩罚机制引导策略学习安全行为。
+          </p>
+        </div>
+      </section>
+
       <div class="footer">
         <div style="margin-bottom: 8px;">Authors: Yuying Zhang & Dingchuan Liu</div>
         <div>最后更新：2026-03-29 · D1 双轮足机器人自主上楼梯项目展示页</div>
@@ -1018,6 +1105,25 @@
         if (link.getAttribute('href').slice(1) === current) {
           link.classList.add('active');
         }
+      });
+    });
+
+    // Parameter Tabs
+    const paramTabs = document.querySelectorAll('.param-tab');
+    const paramPanels = document.querySelectorAll('.param-panel');
+
+    paramTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs and panels
+        paramTabs.forEach(t => t.classList.remove('active'));
+        paramPanels.forEach(p => p.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        tab.classList.add('active');
+        
+        // Show corresponding panel
+        const tabName = tab.getAttribute('data-tab');
+        document.getElementById(tabName + '-panel').classList.add('active');
       });
     });
   </script>

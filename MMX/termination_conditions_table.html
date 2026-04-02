@@ -1,11 +1,11 @@
 <style>
-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-family:var(--font-sans)}
-th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:var(--color-text-secondary);border-bottom:1.5px solid var(--color-border-primary)}
-td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-family:"Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif}
+th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:#475569;border-bottom:1.5px solid #cbd5e1}
+td{padding:8px 10px;border-bottom:0.5px solid #e2e8f0;vertical-align:top}
 tr:last-child td{border-bottom:none}
-.name{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--color-text-primary);white-space:nowrap}
-.formula{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)}
-.purpose{font-size:12px;color:var(--color-text-secondary)}
+.name{font-family:"SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;font-size:12px;font-weight:500;color:#0f172a;white-space:nowrap}
+.formula{font-family:"SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;font-size:11px;color:#475569}
+.purpose{font-size:12px;color:#475569}
 .type-pill{display:inline-block;padding:1px 8px;border-radius:8px;font-size:10px;font-weight:500}
 .hard{background:#FCEBEB;color:#791F1F}
 .soft{background:#FAEEDA;color:#633806}
@@ -34,7 +34,7 @@ tr:last-child td{border-bottom:none}
 </tr>
 </tbody>
 </table>
-<div style="font-size:11px;color:var(--color-text-tertiary);margin-top:10px;line-height:1.6">
+<div style="font-size:11px;color:#64748b;margin-top:10px;line-height:1.6">
 <span class="type-pill hard" style="font-size:9px;vertical-align:middle">hard</span> 终止 = 真正的失败，触发 is_terminated 的 -200 惩罚。<br>
 <span class="type-pill soft" style="font-size:9px;vertical-align:middle">soft</span> 终止 = time_out=True，不算失败，对 V(s) 做 bootstrap：r += γ · V(s) · timeout_flag。
 </div>

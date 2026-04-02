@@ -1,11 +1,11 @@
 <style>
-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-family:var(--font-sans)}
-th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:var(--color-text-secondary);border-bottom:1.5px solid var(--color-border-primary)}
-td{padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-family:"Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif}
+th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:#475569;border-bottom:1.5px solid #cbd5e1}
+td{padding:7px 10px;border-bottom:0.5px solid #e2e8f0;vertical-align:top}
 tr:last-child td{border-bottom:none}
-.name{font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--color-text-primary)}
-.param{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)}
-.purpose{font-size:12px;color:var(--color-text-secondary)}
+.name{font-family:"SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;font-size:11px;font-weight:500;color:#0f172a}
+.param{font-family:"SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;font-size:11px;color:#475569}
+.purpose{font-size:12px;color:#475569}
 .cat-row td{padding:10px 10px 4px;border-bottom:none}
 .cat-pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:500}
 .mode-pill{display:inline-block;padding:1px 8px;border-radius:8px;font-size:10px;font-weight:500}
@@ -96,7 +96,7 @@ tr:last-child td{border-bottom:none}
 </tr>
 </tbody>
 </table>
-<div style="font-size:11px;color:var(--color-text-tertiary);margin-top:10px;line-height:1.6">
+<div style="font-size:11px;color:#64748b;margin-top:10px;line-height:1.6">
 <span class="mode-pill startup" style="font-size:9px;vertical-align:middle">startup</span> = 仿真初始化时随机一次，整个训练过程不变。
 <span class="mode-pill reset" style="font-size:9px;vertical-align:middle">reset</span> = 每次 episode reset 时重新随机，同一轮训练中每个 episode 都不同。
 </div>
