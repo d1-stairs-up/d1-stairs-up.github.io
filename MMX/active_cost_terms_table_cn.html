@@ -1,0 +1,60 @@
+<style>
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-family:var(--font-sans)}
+th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:var(--color-text-secondary);border-bottom:1.5px solid var(--color-border-primary)}
+td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.name{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--color-text-primary);white-space:nowrap}
+.formula{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)}
+.w-k{font-family:var(--font-mono);font-size:12px;font-weight:500;color:#993556;text-align:center}
+.purpose{font-size:12px;color:var(--color-text-secondary)}
+.type-pill{display:inline-block;padding:1px 8px;border-radius:8px;font-size:10px;font-weight:500}
+.bool{background:#FBEAF0;color:#72243E}
+.cont{background:#E6F1FB;color:#0C447C}
+.note{font-size:11px;color:var(--color-text-tertiary);margin-top:12px;line-height:1.6}
+</style>
+<div style="padding:0.25rem 0">
+<table>
+<thead><tr><th style="width:20%">Name</th><th style="width:8%">Type</th><th style="width:30%">Calculation</th><th style="width:8%;text-align:center">k₀</th><th style="width:34%">作用</th></tr></thead>
+<tbody>
+<tr>
+<td class="name">dof_pos_limit</td>
+<td><span class="type-pill bool">bool</span></td>
+<td class="formula">1 if any q outside soft limit, else 0</td>
+<td class="w-k">0.3</td>
+<td class="purpose">约束关节角度不超出物理活动范围</td>
+</tr>
+<tr>
+<td class="name">dof_vel_limit</td>
+<td><span class="type-pill bool">bool</span></td>
+<td class="formula">1 if any |q̇| > soft vel limit, else 0</td>
+<td class="w-k">0.3</td>
+<td class="purpose">约束关节速度不超出安全范围</td>
+</tr>
+<tr>
+<td class="name">torque_limit</td>
+<td><span class="type-pill bool">bool</span></td>
+<td class="formula">1 if |τ_raw| > |τ_clipped|, else 0</td>
+<td class="w-k">0.3</td>
+<td class="purpose">检测执行器饱和，防止力矩指令超出电机能力</td>
+</tr>
+<tr>
+<td class="name">feet_contact_forces</td>
+<td><span class="type-pill bool">bool</span></td>
+<td class="formula">1 if any foot F_z > 500N, else 0</td>
+<td class="w-k">0.1</td>
+<td class="purpose">限制落地冲击力，保护轮/脚硬件</td>
+</tr>
+<tr>
+<td class="name">height_l2</td>
+<td><span class="type-pill cont">cont</span></td>
+<td class="formula">(h_base − 0.55)², terrain-adjusted</td>
+<td class="w-k">0.1</td>
+<td class="purpose">软约束基座高度偏离目标值 0.55m 的程度</td>
+</tr>
+</tbody>
+</table>
+<div class="note">
+k₀ 为 NP3O 乘子初始值，训练中按 k ← min(1, k × 1.0004ⁱ) 递增。<br>
+约束路径：L_viol = k × ReLU( J_C_surr + viol )，仅在约束被违反时激活梯度。
+</div>
+</div>

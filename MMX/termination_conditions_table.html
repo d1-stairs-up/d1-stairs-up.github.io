@@ -1,0 +1,41 @@
+<style>
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-family:var(--font-sans)}
+th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:var(--color-text-secondary);border-bottom:1.5px solid var(--color-border-primary)}
+td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.name{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--color-text-primary);white-space:nowrap}
+.formula{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)}
+.purpose{font-size:12px;color:var(--color-text-secondary)}
+.type-pill{display:inline-block;padding:1px 8px;border-radius:8px;font-size:10px;font-weight:500}
+.hard{background:#FCEBEB;color:#791F1F}
+.soft{background:#FAEEDA;color:#633806}
+</style>
+<div style="padding:0.25rem 0">
+<table>
+<thead><tr><th style="width:22%">Name</th><th style="width:8%">Type</th><th style="width:34%">Trigger condition</th><th style="width:36%">作用</th></tr></thead>
+<tbody>
+<tr>
+<td class="name">illegal_contact</td>
+<td><span class="type-pill hard">hard</span></td>
+<td class="formula">base_link 接触力 F > 1.0 N</td>
+<td class="purpose">基座碰到地面或障碍物 → 立即终止。配合 is_terminated 的 -200 惩罚，是最强的安全约束</td>
+</tr>
+<tr>
+<td class="name">time_out</td>
+<td><span class="type-pill soft">soft</span></td>
+<td class="formula">episode 步数达到最大长度</td>
+<td class="purpose">正常超时结束（time_out=True），不算失败。reward 会做 bootstrap 补偿未来回报</td>
+</tr>
+<tr>
+<td class="name">terrain_out_of_bounds</td>
+<td><span class="type-pill soft">soft</span></td>
+<td class="formula">机器人距离地形边界 < 3.0m</td>
+<td class="purpose">防止走出地形范围（time_out=True），不扣终止惩罚，只是重置到新位置继续训练</td>
+</tr>
+</tbody>
+</table>
+<div style="font-size:11px;color:var(--color-text-tertiary);margin-top:10px;line-height:1.6">
+<span class="type-pill hard" style="font-size:9px;vertical-align:middle">hard</span> 终止 = 真正的失败，触发 is_terminated 的 -200 惩罚。<br>
+<span class="type-pill soft" style="font-size:9px;vertical-align:middle">soft</span> 终止 = time_out=True，不算失败，对 V(s) 做 bootstrap：r += γ · V(s) · timeout_flag。
+</div>
+</div>

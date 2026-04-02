@@ -1,0 +1,103 @@
+<style>
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-family:var(--font-sans)}
+th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:var(--color-text-secondary);border-bottom:1.5px solid var(--color-border-primary)}
+td{padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.name{font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--color-text-primary)}
+.param{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)}
+.purpose{font-size:12px;color:var(--color-text-secondary)}
+.cat-row td{padding:10px 10px 4px;border-bottom:none}
+.cat-pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:500}
+.mode-pill{display:inline-block;padding:1px 8px;border-radius:8px;font-size:10px;font-weight:500}
+.startup{background:#EEEDFE;color:#3C3489}
+.reset{background:#E1F5EE;color:#085041}
+</style>
+<div style="padding:0.25rem 0">
+<table>
+<thead><tr><th style="width:24%">Name</th><th style="width:8%">Mode</th><th style="width:30%">Range</th><th style="width:38%">作用</th></tr></thead>
+<tbody>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#FAECE7;color:#712B13">接触物理</span></td></tr>
+<tr>
+<td class="name">rigid_body_material</td>
+<td><span class="mode-pill startup">startup</span></td>
+<td class="param">static_friction: [0.2, 1.3]<br>dynamic_friction: [0.2, 1.3]<br>restitution: [0.0, 1.0]<br>64 buckets</td>
+<td class="purpose">随机化地面摩擦和弹性系数，适应不同地面材质（瓷砖、水泥、橡胶等）</td>
+</tr>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#E6F1FB;color:#0C447C">质量与惯性</span></td></tr>
+<tr>
+<td class="name">rigid_body_mass_base</td>
+<td><span class="mode-pill startup">startup</span></td>
+<td class="param">base_link: ±1.0 kg (add)</td>
+<td class="purpose">模拟机身附加载重（电池更换、加装设备等）</td>
+</tr>
+<tr>
+<td class="name">rigid_body_mass_others</td>
+<td><span class="mode-pill startup">startup</span></td>
+<td class="param">非基座连杆: ×[0.7, 1.3] (scale)</td>
+<td class="purpose">模拟各连杆质量的建模误差</td>
+</tr>
+<tr>
+<td class="name">com_positions</td>
+<td><span class="mode-pill startup">startup</span></td>
+<td class="param">base_link CoM: ±5cm xyz</td>
+<td class="purpose">模拟重心偏移（载荷不对称等）</td>
+</tr>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#FBEAF0;color:#72243E">外部扰动</span></td></tr>
+<tr>
+<td class="name">external_force_torque</td>
+<td><span class="mode-pill reset">reset</span></td>
+<td class="param">force: ±10 N (xyz)<br>torque: ±10 Nm (xyz)</td>
+<td class="purpose">施加随机外力/力矩，模拟推撞、风力等扰动</td>
+</tr>
+<tr>
+<td class="name">reset_base</td>
+<td><span class="mode-pill reset">reset</span></td>
+<td class="param">xy: ±0.5m, z: 0.32m<br>vel: 全零</td>
+<td class="purpose">每次 reset 随机化初始位置，避免过拟合到特定起点</td>
+</tr>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#FAEEDA;color:#633806">执行器参数</span></td></tr>
+<tr>
+<td class="name">actuator_gains</td>
+<td><span class="mode-pill reset">reset</span></td>
+<td class="param">Kp: ×[0.8, 1.2]<br>Kd: ×[0.8, 1.2]</td>
+<td class="purpose">模拟 PD 控制器增益的不确定性和电机老化</td>
+</tr>
+<tr>
+<td class="name">joint_armature</td>
+<td><span class="mode-pill reset">reset</span></td>
+<td class="param">armature: ×[0.8, 1.2]</td>
+<td class="purpose">模拟转子+减速器惯量的建模误差</td>
+</tr>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#EAF3DE;color:#27500A">关节摩擦</span></td></tr>
+<tr>
+<td class="name">joint_friction (leg)</td>
+<td><span class="mode-pill reset">reset</span></td>
+<td class="param">static: [0.01, 0.03]<br>dynamic: [0.01, 0.03]<br>viscous: [0.08, 0.12]</td>
+<td class="purpose">模拟腿关节轴承磨损和润滑差异</td>
+</tr>
+<tr>
+<td class="name">joint_friction (wheel)</td>
+<td><span class="mode-pill reset">reset</span></td>
+<td class="param">static: [0.01, 0.06]<br>dynamic: [0.01, 0.06]<br>viscous: [0.1, 0.2]</td>
+<td class="purpose">模拟轮毂摩擦（范围更大，轮子接触面变化更多）</td>
+</tr>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#F1EFE8;color:#444441">通信延迟（执行器内置）</span></td></tr>
+<tr>
+<td class="name">actuator delay</td>
+<td><span class="mode-pill startup">startup</span></td>
+<td class="param">all joints: [0, 3] steps<br>= [0, 30] ms @ 100Hz</td>
+<td class="purpose">模拟传感器→计算→电机的通信链路延迟</td>
+</tr>
+</tbody>
+</table>
+<div style="font-size:11px;color:var(--color-text-tertiary);margin-top:10px;line-height:1.6">
+<span class="mode-pill startup" style="font-size:9px;vertical-align:middle">startup</span> = 仿真初始化时随机一次，整个训练过程不变。
+<span class="mode-pill reset" style="font-size:9px;vertical-align:middle">reset</span> = 每次 episode reset 时重新随机，同一轮训练中每个 episode 都不同。
+</div>
+</div>

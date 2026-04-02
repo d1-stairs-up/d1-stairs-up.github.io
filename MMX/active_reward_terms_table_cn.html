@@ -1,0 +1,48 @@
+<style>
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;font-family:var(--font-sans)}
+th{text-align:left;padding:8px 10px;font-weight:500;font-size:12px;color:var(--color-text-secondary);border-bottom:1.5px solid var(--color-border-primary)}
+td{padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.name{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--color-text-primary);white-space:nowrap}
+.formula{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)}
+.w-pos{font-family:var(--font-mono);font-size:12px;font-weight:500;color:#0F6E56;text-align:center}
+.w-neg{font-family:var(--font-mono);font-size:12px;font-weight:500;color:#A32D2D;text-align:center}
+.purpose{font-size:12px;color:var(--color-text-secondary)}
+.cat-row td{padding:10px 10px 4px;border-bottom:none;font-weight:500;font-size:12px}
+.cat-pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:500}
+</style>
+<div style="padding:0.25rem 0">
+<table>
+<thead><tr><th style="width:24%">Name</th><th style="width:34%">Calculation</th><th style="width:8%;text-align:center">Weight</th><th style="width:34%">作用</th></tr></thead>
+<tbody>
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#E1F5EE;color:#085041">速度跟踪（主目标）</span></td></tr>
+<tr><td class="name">track_lin_vel_xy_exp</td><td class="formula">exp( -‖v_cmd − v‖² / 0.25 )</td><td class="w-pos">+5.0</td><td class="purpose">跟踪前进/侧向速度指令，主奖励项</td></tr>
+<tr><td class="name">track_ang_vel_z_exp</td><td class="formula">exp( -(ω_cmd − ω_z)² / 0.25 ) × g_gate</td><td class="w-pos">+2.5</td><td class="purpose">跟踪偏航角速度指令，仅在直立时激活</td></tr>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#EEEDFE;color:#3C3489">姿态稳定</span></td></tr>
+<tr><td class="name">flat_orientation_l2</td><td class="formula">-‖gravity_xy‖²</td><td class="w-neg">−5.0</td><td class="purpose">惩罚机体倾斜，保持水平姿态</td></tr>
+<tr><td class="name">base_height</td><td class="formula">-(h − 0.55)², terrain-adjusted</td><td class="w-neg">−2.0</td><td class="purpose">保持基座高度在目标值 0.55m 附近</td></tr>
+<tr><td class="name">upward</td><td class="formula">(1 − gravity_z)²</td><td class="w-pos">+0.05</td><td class="purpose">鼓励机体 z 轴朝上（正立）</td></tr>
+<tr><td class="name">ang_vel_xy_l2</td><td class="formula">-‖ω_xy‖²</td><td class="w-neg">−0.05</td><td class="purpose">惩罚横滚/俯仰方向的角速度</td></tr>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#E6F1FB;color:#0C447C">轮腿协调</span></td></tr>
+<tr><td class="name">wheel_body_speed_match</td><td class="formula">-(v_wheel × r − v_body)²</td><td class="w-neg">−0.05</td><td class="purpose">轮子线速度应与机体行进速度匹配</td></tr>
+<tr><td class="name">wheel_vel_penalty</td><td class="formula">-‖ω_wheel‖ when airborne/still</td><td class="w-neg">−0.05</td><td class="purpose">腾空或静止时不要空转轮子</td></tr>
+<tr><td class="name">same_foot_x_position</td><td class="formula">exp( -Δx² / 0.04 )</td><td class="w-pos">+0.05</td><td class="purpose">鼓励左右脚在前进方向对齐</td></tr>
+<tr><td class="name">feet_distance_y_exp</td><td class="formula">exp( -(Δy − 0.44)² / 0.01 )</td><td class="w-pos">+0.1</td><td class="purpose">保持侧向站距 0.44m</td></tr>
+<tr><td class="name">com_feet</td><td class="formula">-‖CoM_xy − feet_mid‖</td><td class="w-neg">−0.40</td><td class="purpose">重心保持在两脚中点之间</td></tr>
+<tr><td class="name">no_contact</td><td class="formula">−1 if both feet off ground</td><td class="w-neg">−1.0</td><td class="purpose">禁止双脚同时离地（不允许腾空）</td></tr>
+<tr><td class="name">stand_still</td><td class="formula">-‖q − q_default‖ when cmd ≈ 0</td><td class="w-neg">−0.5</td><td class="purpose">无速度指令时回到默认站姿</td></tr>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#FAEEDA;color:#633806">平滑性 / 节能</span></td></tr>
+<tr><td class="name">action_rate_l2</td><td class="formula">-‖a_t − a_{t−1}‖²</td><td class="w-neg">−0.01</td><td class="purpose">惩罚相邻步动作突变，减少抖动</td></tr>
+<tr><td class="name">joint_acc_l2</td><td class="formula">-Σ(q̈_leg)²</td><td class="w-neg">−2.5e-7</td><td class="purpose">惩罚腿部关节加速度，平滑运动</td></tr>
+<tr><td class="name">joint_acc_wheel_l2</td><td class="formula">-Σ(q̈_wheel)²</td><td class="w-neg">−1e-9</td><td class="purpose">惩罚轮关节加速度</td></tr>
+<tr><td class="name">joint_power</td><td class="formula">-Σ|τ × q̇| for legs</td><td class="w-neg">−2e-5</td><td class="purpose">最小化机械功耗，节省能量</td></tr>
+
+<tr class="cat-row"><td colspan="4"><span class="cat-pill" style="background:#FCEBEB;color:#791F1F">安全</span></td></tr>
+<tr><td class="name">undesired_contacts</td><td class="formula">-count(F > 1N on non-foot)</td><td class="w-neg">−10.0</td><td class="purpose">非脚部身体部位碰撞，重罚</td></tr>
+<tr><td class="name">is_terminated</td><td class="formula">−1 on episode termination</td><td class="w-neg">−200</td><td class="purpose">终止时超大惩罚（基座触地等）</td></tr>
+</tbody>
+</table>
+</div>
