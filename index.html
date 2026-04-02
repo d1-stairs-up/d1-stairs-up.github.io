@@ -573,12 +573,27 @@
       aspect-ratio: 4 / 3;
     }
 
+    /* 图表使用自适应高度，保持原图比例 */
+    .media-box.chart {
+      aspect-ratio: auto;
+      height: auto;
+      background: #ffffff;
+    }
+
     .media-box img,
     .media-box video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform var(--transition-slow);
+    }
+
+    /* 图表图片使用 contain 保持完整显示 */
+    .media-box.chart img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
     }
 
     .media-card:hover .media-box img {
@@ -891,7 +906,7 @@
 
           <div class="media-grid">
             <div class="media-card" style="grid-column: span 2;">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Terrain Level Comparison</span>
                 <img src="images/split/terrain_levels.png" alt="五种算法的地形等级对比">
               </div>
@@ -926,7 +941,7 @@
           <h4 style="margin: 24px 0 16px; font-size: 1rem; color: var(--text-primary); font-weight: 600;">2.1 冗余减少指标</h4>
           <div class="media-grid three">
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Off-diagonal Loss</span>
                 <img src="images/split/bt_off_diag.png" alt="Off-diagonal 损失">
               </div>
@@ -936,7 +951,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Cosine Similarity</span>
                 <img src="images/split/bt_cosine_sim.png" alt="余弦相似度">
               </div>
@@ -946,7 +961,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">On-diagonal</span>
                 <img src="images/split/bt_on_diag.png" alt="On-diagonal">
               </div>
@@ -960,7 +975,7 @@
           <h4 style="margin: 32px 0 16px; font-size: 1rem; color: var(--text-primary); font-weight: 600;">2.2 表征质量与多样性</h4>
           <div class="media-grid three">
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Effective Rank</span>
                 <img src="images/split/bt_effective_rank.png" alt="有效秩">
               </div>
@@ -970,7 +985,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Latent Std Mean</span>
                 <img src="images/split/bt_latent_std_mean.png" alt="Latent Std 均值">
               </div>
@@ -980,7 +995,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Latent Std Min</span>
                 <img src="images/split/bt_latent_std_min.png" alt="Latent Std 最小值">
               </div>
@@ -1013,7 +1028,7 @@
           <h4 style="margin: 24px 0 16px; font-size: 1rem; color: var(--text-primary); font-weight: 600;">3.1 关节加速度与能耗（Joint Acc & Power）</h4>
           <div class="media-grid three">
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Joint Acc Wheel</span>
                 <img src="images/split/rg1_joint_acc_wheel.png" alt="轮子关节加速度">
               </div>
@@ -1023,7 +1038,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Joint Power</span>
                 <img src="images/split/rg1_joint_power.png" alt="关节功率">
               </div>
@@ -1033,7 +1048,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">No Contact</span>
                 <img src="images/split/rg1_no_contact.png" alt="无接触惩罚">
               </div>
@@ -1047,7 +1062,7 @@
           <h4 style="margin: 32px 0 16px; font-size: 1rem; color: var(--text-primary); font-weight: 600;">3.2 动作平滑性与机体姿态（Smoothness & Posture）</h4>
           <div class="media-grid three">
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Action Rate</span>
                 <img src="images/split/rg2_action_rate.png" alt="动作变化率">
               </div>
@@ -1057,7 +1072,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Ang Vel XY</span>
                 <img src="images/split/rg2_ang_vel_xy.png" alt="横滚俯仰角速度">
               </div>
@@ -1067,7 +1082,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Base Height</span>
                 <img src="images/split/rg2_base_height.png" alt="基座高度">
               </div>
@@ -1081,7 +1096,7 @@
           <h4 style="margin: 32px 0 16px; font-size: 1rem; color: var(--text-primary); font-weight: 600;">3.3 速度跟踪与轮足协调（Velocity Tracking & Coordination）</h4>
           <div class="media-grid three">
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Track Ang Vel Z</span>
                 <img src="images/split/rg3_track_ang_vel_z.png" alt="偏航角速度跟踪">
               </div>
@@ -1091,7 +1106,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Track Lin Vel</span>
                 <img src="images/split/rg3_track_lin_vel_xy.png" alt="线速度跟踪">
               </div>
@@ -1101,7 +1116,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Undesired Contacts</span>
                 <img src="images/split/rg3_undesired_contacts.png" alt="非期望接触">
               </div>
@@ -1113,7 +1128,7 @@
           </div>
           <div class="media-grid" style="margin-top: 20px;">
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Wheel Body Speed</span>
                 <img src="images/split/rg3_wheel_body_speed.png" alt="轮体速度匹配">
               </div>
@@ -1123,7 +1138,7 @@
               </div>
             </div>
             <div class="media-card">
-              <div class="media-box">
+              <div class="media-box chart">
                 <span class="media-label">Wheel Vel Penalty</span>
                 <img src="images/split/rg3_wheel_vel_penalty.png" alt="轮子速度惩罚">
               </div>
