@@ -1149,16 +1149,41 @@
             </div>
           </div>
 
-          <div class="highlight-box" style="margin-top: 24px;">
-            <p>
-              <strong>综合分析：为什么 PPO w/o BT 虽然最高但不可行？</strong><br><br>
-              从 Terrain Level 曲线看，<strong>PPO w/o BT（红线）最先到达最高 level 且最终 level 最高</strong>。如果只关注这一个指标，似乎 PPO 是最优选择。但深入分析后续所有约束诊断指标后，发现 PPO 的策略存在严重缺陷：<br><br>
-              <strong>1. 关节加速度与功耗</strong>：PPO 的轮子关节加速度和关节功率惩罚显著高于 NP3O 系列，说明 PPO 为了快速达到高地形等级，采用了激进、高耗能的关节动作策略。<br>
-              <strong>2. 动作平滑性</strong>：PPO 的动作变化率波动剧烈，控制信号抖动大；机体晃动更剧烈，姿态不稳定。<br>
-              <strong>3. 轮足协调</strong>：PPO 频繁出现双脚离地、非期望接触、轮子空转等问题，轮足协同控制不协调。<br>
-              <strong>4. 速度跟踪</strong>：PPO 的偏航角速度和线速度跟踪效果差，转向和前进控制不稳定。<br><br>
-              <strong>核心结论</strong>：PPO 虽然 Terrain Level 最高，但它学习了"投机取巧"的模式——通过激进的动作、高功耗、不稳定的接触切换来"硬冲"上楼梯。这种策略在仿真中可能有效，但<strong>无法迁移到真实机器人</strong>，因为真实硬件无法承受如此剧烈的加速度、功耗和不稳定的接触。相比之下，<strong>NP3O+BT</strong> 虽然上升较慢，但动作平滑、功耗合理、轮足协调，才是真正可部署的 Sim-to-Real 方案。
+          <div class="highlight-box" style="margin-top: 32px;">
+            <h4 style="margin: 0 0 16px 0; font-size: 1.1rem; color: var(--text-primary);">综合分析：为什么 PPO w/o BT 虽然最高但不可行？</h4>
+            
+            <p style="margin-bottom: 16px; line-height: 1.8;">
+              从 Terrain Level 曲线看，<strong>PPO w/o BT（红线）最先到达最高 level 且最终 level 最高</strong>。如果只关注这一个指标，似乎 PPO 是最优选择。但深入分析后续所有约束诊断指标后，发现 PPO 的策略存在严重缺陷：
             </p>
+            
+            <div style="margin: 20px 0; padding-left: 8px;">
+              <div style="margin-bottom: 14px; padding: 12px 16px; background: rgba(248, 250, 252, 0.8); border-radius: 8px; border-left: 3px solid #ef4444;">
+                <strong style="color: #dc2626; display: block; margin-bottom: 6px;">1. 关节加速度与功耗</strong>
+                <span style="color: var(--text-secondary);">PPO 的轮子关节加速度和关节功率惩罚显著高于 NP3O 系列，说明 PPO 为了快速达到高地形等级，采用了激进、高耗能的关节动作策略。</span>
+              </div>
+              
+              <div style="margin-bottom: 14px; padding: 12px 16px; background: rgba(248, 250, 252, 0.8); border-radius: 8px; border-left: 3px solid #ef4444;">
+                <strong style="color: #dc2626; display: block; margin-bottom: 6px;">2. 动作平滑性</strong>
+                <span style="color: var(--text-secondary);">PPO 的动作变化率波动剧烈，控制信号抖动大；机体晃动更剧烈，姿态不稳定。</span>
+              </div>
+              
+              <div style="margin-bottom: 14px; padding: 12px 16px; background: rgba(248, 250, 252, 0.8); border-radius: 8px; border-left: 3px solid #ef4444;">
+                <strong style="color: #dc2626; display: block; margin-bottom: 6px;">3. 轮足协调</strong>
+                <span style="color: var(--text-secondary);">PPO 频繁出现双脚离地、非期望接触、轮子空转等问题，轮足协同控制不协调。</span>
+              </div>
+              
+              <div style="margin-bottom: 14px; padding: 12px 16px; background: rgba(248, 250, 252, 0.8); border-radius: 8px; border-left: 3px solid #ef4444;">
+                <strong style="color: #dc2626; display: block; margin-bottom: 6px;">4. 速度跟踪</strong>
+                <span style="color: var(--text-secondary);">PPO 的偏航角速度和线速度跟踪效果差，转向和前进控制不稳定。</span>
+              </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 16px 20px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 12px; border: 1px solid #bfdbfe;">
+              <strong style="color: #1e40af; display: block; margin-bottom: 8px; font-size: 1.05rem;">核心结论</strong>
+              <p style="margin: 0; line-height: 1.75; color: #1e3a8a;">
+                PPO 虽然 Terrain Level 最高，但它学习了"投机取巧"的模式——通过激进的动作、高功耗、不稳定的接触切换来"硬冲"上楼梯。这种策略在仿真中可能有效，但<strong>无法迁移到真实机器人</strong>，因为真实硬件无法承受如此剧烈的加速度、功耗和不稳定的接触。相比之下，<strong>NP3O+BT</strong> 虽然上升较慢，但动作平滑、功耗合理、轮足协调，才是真正可部署的 Sim-to-Real 方案。
+              </p>
+            </div>
           </div>
         </div>
       </section>
