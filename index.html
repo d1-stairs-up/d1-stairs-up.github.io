@@ -284,9 +284,10 @@
     }
 
     section:nth-child(2) { animation-delay: 0.1s; }
-    section:nth-child(3) { animation-delay: 0.2s; }
-    section:nth-child(4) { animation-delay: 0.3s; }
-    section:nth-child(5) { animation-delay: 0.4s; }
+    section:nth-child(3) { animation-delay: 0.15s; }
+    section:nth-child(4) { animation-delay: 0.2s; }
+    section:nth-child(5) { animation-delay: 0.25s; }
+    section:nth-child(6) { animation-delay: 0.3s; }
 
     @keyframes fadeInUp {
       to {
@@ -768,6 +769,30 @@
                 <h4 class="media-title">Isaac Lab 仿真结果</h4>
                 <p class="media-desc">
                   最终训练策略在仿真中的执行效果，让读者先看到训练环境中的任务表现。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="experiment-group">
+          <div class="group-header">
+            <h3 class="group-title">MuJoCo 仿真中的策略表现</h3>
+            <p class="group-text">
+              该视频展示了策略在 MuJoCo 环境中的自主上楼梯效果。可以重点观察机器人在轮足协同、台阶接触切换和机体前向推进过程中的动作节奏。仿真阶段的目标不是只让机器人"上去"，而是学习一种能够在离散接触条件下保持平滑、可迁移的控制模式。
+            </p>
+          </div>
+
+          <div class="media-grid">
+            <div class="media-card">
+              <div class="media-box">
+                <span class="media-label">MuJoCo Demo</span>
+                <video src="videos/mujoco_demo.mp4" controls muted playsinline loop></video>
+              </div>
+              <div class="media-content">
+                <h4 class="media-title">MuJoCo 仿真结果</h4>
+                <p class="media-desc">
+                  展示了策略在 MuJoCo 物理仿真环境中的上楼梯表现，验证了控制策略在不同仿真平台间的迁移能力。
                 </p>
               </div>
             </div>
