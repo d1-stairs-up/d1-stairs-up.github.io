@@ -872,7 +872,7 @@
           <div class="group-header">
             <h3 class="group-title">1. 地形通过能力（核心指标）</h3>
             <p class="group-text">
-              <strong>Terrain Level</strong>衡量策略能够成功通过的地形难度等级，是评价上楼梯能力的核心指标。
+              <strong>Terrain Level</strong>衡量策略能够成功通过的地形难度等级，是评价上楼梯能力的核心指标。从图中可以观察到以下关键事实：
             </p>
           </div>
 
@@ -884,19 +884,19 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">五种算法地形等级曲线</h4>
-                <p class="media-desc"><strong>NP3O+BT</strong>最终性能最优（level 12+）；<strong>PPO+BT</strong>早期上升快但方差大；<strong>NP3O</strong>稳定但慢；<strong>PPO</strong>波动剧烈；<strong>HIMLoco</strong>早饱和。</p>
+                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>最先到达最高level且最终level最高；<strong>NP3O+BT（蓝线）</strong>上升较慢但最终接近；<strong>HIMLoco（紫线）</strong>最早饱和于低level。</p>
               </div>
             </div>
           </div>
 
           <div class="highlight-box" style="margin-top: 20px;">
             <p>
-              <strong>各算法表现分析：</strong><br>
-              <strong>NP3O+BT（蓝线）</strong>：约 1500 次迭代后快速上升，最终稳定在高地形等级（level 12+），方差最小，体现了约束优化与表征学习的协同优势。<br>
-              <strong>PPO+BT（橙线）</strong>：早期上升速度与 PPO 接近，但 BT 的加入使其后期稳定性优于纯 PPO，最终仍被 NP3O+BT 超越，说明仅有表征学习而无约束优化仍不够。<br>
-              <strong>NP3O（绿线）</strong>：收敛稳定但上升缓慢，后期增长乏力，说明缺乏 BT 的高质量表征限制了样本效率。<br>
-              <strong>PPO（红线）</strong>：早期上升最快（约 1000 次迭代），但伴随高方差和剧烈波动，后期甚至下降，策略不稳定。<br>
-              <strong>HIMLoco（紫线）</strong>：最早饱和于较低难度（level 8-10），固定步态难以适应复杂楼梯。
+              <strong>各算法表现分析（基于事实）：</strong><br>
+              <strong>PPO w/o BT（红线）</strong>：约 6000 次迭代最先到达最高地形等级（接近 level 5），且最终level也是所有方法中最高的。但这只是表面优势，后续指标分析将揭示其策略存在严重问题。<br>
+              <strong>NP3O+BT（蓝线）</strong>：约 1500 次迭代后开始稳步上升，最终地形等级接近 PPO，但上升过程更加平滑渐进，体现了约束优化与表征学习的协同效果。<br>
+              <strong>NP3O w/o BT（橙线）</strong>：上升速度与 NP3O+BT 相近，但中期（4000-8000 迭代）被 PPO+BT 超越，说明缺乏 BT 表征学习限制了其学习效率。<br>
+              <strong>PPO+BT（绿线）</strong>：中期上升较快，但最终被 NP3O+BT 超越，说明仅有表征学习而无约束优化仍不够。<br>
+              <strong>HIMLoco（紫线）</strong>：最早饱和于较低难度（约 level 3），固定步态难以适应复杂楼梯场景。
             </p>
           </div>
         </div>
@@ -1006,7 +1006,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">轮子关节加速度 L2</h4>
-                <p class="media-desc"><strong>PPO/PPO+BT（红/青）</strong>：惩罚值高且波动大，轮子运动剧烈；<strong>NP3O/NP3O+BT（绿/蓝）</strong>：惩罚快速下降并保持低位，轮子运动平滑可控。</p>
+                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>和<strong>PPO+BT（绿线）</strong>：惩罚值高且波动大，轮子运动剧烈；<strong>NP3O w/o BT（橙线）</strong>和<strong>NP3O+BT（蓝线）</strong>：惩罚快速下降并保持低位，轮子运动平滑可控。</p>
               </div>
             </div>
             <div class="media-card">
@@ -1040,7 +1040,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">动作变化率 L2</h4>
-                <p class="media-desc"><strong>PPO 系列（红/青）</strong>：动作 rate 持续高位，控制信号抖动大；<strong>NP3O 系列（绿/蓝）</strong>：动作平滑变化，更适合硬件执行。</p>
+                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>和<strong>PPO+BT（绿线）</strong>：动作 rate 持续高位，控制信号抖动大；<strong>NP3O w/o BT（橙线）</strong>和<strong>NP3O+BT（蓝线）</strong>：动作平滑变化，更适合硬件执行。</p>
               </div>
             </div>
             <div class="media-card">
@@ -1060,7 +1060,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">基座高度偏离惩罚</h4>
-                <p class="media-desc"><strong>PPO 系列</strong>：基座高度偏离目标值 0.55m 更多，起伏大；<strong>NP3O 系列</strong>：高度控制精准，机身稳定。</p>
+                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>和<strong>PPO+BT（绿线）</strong>：基座高度偏离目标值 0.55m 更多，起伏大；<strong>NP3O w/o BT（橙线）</strong>和<strong>NP3O+BT（蓝线）</strong>：高度控制精准，机身稳定。</p>
               </div>
             </div>
           </div>
@@ -1074,7 +1074,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">偏航角速度跟踪奖励</h4>
-                <p class="media-desc"><strong>PPO 系列（红/青）</strong>：跟踪效果差，转向控制不稳定，曲线波动大；<strong>NP3O 系列（绿/蓝）</strong>：转向跟踪精准，奖励值高且稳定。</p>
+                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>和<strong>PPO+BT（绿线）</strong>：跟踪效果差，转向控制不稳定，曲线波动大；<strong>NP3O w/o BT（橙线）</strong>和<strong>NP3O+BT（蓝线）</strong>：转向跟踪精准，奖励值高且稳定。</p>
               </div>
             </div>
             <div class="media-card">
@@ -1084,7 +1084,7 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">线速度 XY 跟踪奖励</h4>
-                <p class="media-desc"><strong>PPO 系列</strong>：前进速度跟踪误差大，经常过冲；<strong>NP3O 系列</strong>：速度跟踪平滑，渐进加速减速。</p>
+                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>和<strong>PPO+BT（绿线）</strong>：前进速度跟踪误差大，经常过冲；<strong>NP3O w/o BT（橙线）</strong>和<strong>NP3O+BT（蓝线）</strong>：速度跟踪平滑，渐进加速减速。</p>
               </div>
             </div>
             <div class="media-card">
@@ -1116,19 +1116,20 @@
               </div>
               <div class="media-content">
                 <h4 class="media-title">腾空轮子速度惩罚</h4>
-                <p class="media-desc"><strong>PPO 系列</strong>：腾空时轮子仍高速转动，空转严重；<strong>NP3O 系列</strong>：轮子控制合理，触地才转动。</p>
+                <p class="media-desc"><strong>PPO w/o BT（红线）</strong>和<strong>PPO+BT（绿线）</strong>：腾空时轮子仍高速转动，空转严重；<strong>NP3O w/o BT（橙线）</strong>和<strong>NP3O+BT（蓝线）</strong>：轮子控制合理，触地才转动。</p>
               </div>
             </div>
           </div>
 
           <div class="highlight-box" style="margin-top: 24px;">
             <p>
-              <strong>综合分析：为什么 NP3O+BT 最优？</strong><br><br>
-              <strong>对比维度一：BT 的作用（NP3O+BT vs NP3O，PPO+BT vs PPO）</strong><br>
-              加入 Barlow Twins 后，两类方法（NP3O 和 PPO）的样本效率都显著提升：NP3O+BT 比 NP3O 收敛快约 40%，PPO+BT 比纯 PPO 更稳定。表征分析指标（Off-diagonal↓、Effective Rank↑、无坍缩）验证了 BT 学习到高质量状态表征。<br><br>
-              <strong>对比维度二：NP3O 约束优化的作用（NP3O+BT vs PPO+BT，NP3O vs PPO）</strong><br>
-              即使都有 BT，NP3O 系列在动作质量上全面优于 PPO 系列：关节加速度更低、功耗更小、动作更平滑、姿态更稳定、轮足协调更好。这是因为 NP3O 将安全约束作为硬约束优化，而 PPO 仅通过软惩罚约束，容易"投机取巧"。<br><br>
-              <strong>结论：</strong>对于双轮足机器人这类高动态、高约束系统，必须同时满足两个条件才能学习到可迁移的技能：(1) <strong>Barlow Twins</strong> 提供高质量状态表征，提升样本效率；(2) <strong>NP3O</strong> 约束优化确保动作在安全约束范围内，避免激进不可行的策略。
+              <strong>综合分析：为什么 PPO w/o BT 虽然最高但不可行？</strong><br><br>
+              从 Terrain Level 曲线看，<strong>PPO w/o BT（红线）最先到达最高 level 且最终 level 最高</strong>。如果只关注这一个指标，似乎 PPO 是最优选择。但深入分析后续所有约束诊断指标后，发现 PPO 的策略存在严重缺陷：<br><br>
+              <strong>1. 关节加速度与功耗</strong>：PPO 的轮子关节加速度和关节功率惩罚显著高于 NP3O 系列，说明 PPO 为了快速达到高地形等级，采用了激进、高耗能的关节动作策略。<br>
+              <strong>2. 动作平滑性</strong>：PPO 的动作变化率波动剧烈，控制信号抖动大；机体晃动更剧烈，姿态不稳定。<br>
+              <strong>3. 轮足协调</strong>：PPO 频繁出现双脚离地、非期望接触、轮子空转等问题，轮足协同控制不协调。<br>
+              <strong>4. 速度跟踪</strong>：PPO 的偏航角速度和线速度跟踪效果差，转向和前进控制不稳定。<br><br>
+              <strong>核心结论</strong>：PPO 虽然 Terrain Level 最高，但它学习了"投机取巧"的模式——通过激进的动作、高功耗、不稳定的接触切换来"硬冲"上楼梯。这种策略在仿真中可能有效，但<strong>无法迁移到真实机器人</strong>，因为真实硬件无法承受如此剧烈的加速度、功耗和不稳定的接触。相比之下，<strong>NP3O+BT</strong> 虽然上升较慢，但动作平滑、功耗合理、轮足协调，才是真正可部署的 Sim-to-Real 方案。
             </p>
           </div>
         </div>
