@@ -783,6 +783,7 @@
 
       <nav class="nav-bar" id="navbar">
         <a class="nav-link" href="#overview">项目简介</a>
+        <a class="nav-link" href="#actuator-model">执行器建模</a>
         <a class="nav-link" href="#comparison">仿真视频</a>
         <a class="nav-link" href="#ablation">消融实验</a>
         <a class="nav-link" href="#realworld">实机实验</a>
@@ -825,8 +826,67 @@
 
         <div class="highlight-box">
           <p>
-            <strong>方法概述：</strong>项目采用基于 NP3O 的约束强化学习框架，将关节安全限制作为训练中的硬约束进行优化。在策略结构上，使用非对称 Actor-Critic，让 critic 利用训练阶段的特权信息提升价值估计质量，而 actor 仅依赖部署时可获得观测进行决策。同时引入 Barlow Twins 自监督学习增强状态表征能力，提升策略在复杂楼梯场景下的鲁棒性与泛化性能。
+            <strong>方法概述：</strong>项目采用基于 NP3O 的约束强化学习框架，将关节安全限制作为训练中的硬约束进行优化。在策略结构上，使用非对称 Actor-Critic，让 critic 利用训练阶段的特权信息提升价值估计质量，而 actor 仅依赖部署时可获得观测进行决策。同时引入 Barlow Twins 自监督学习增强状态表征能力，并在执行器侧引入更接近真实硬件的时延建模，提升策略在复杂楼梯场景下的鲁棒性与 Sim-to-Real 可迁移性。
           </p>
+        </div>
+      </section>
+
+      <section id="actuator-model">
+        <div class="section-header">
+          <h2 class="section-title">执行器建模</h2>
+          <p class="section-desc">
+            为了进一步减小 sim-to-real gap，训练时不再使用理想化的执行器假设，而是将更接近真实硬件响应特性的执行器模型引入仿真闭环。
+          </p>
+        </div>
+
+        <div class="experiment-group">
+          <div class="group-header">
+            <h3 class="group-title">从理想执行器到带时延的执行器模型</h3>
+            <p class="group-text">
+              当前训练中使用的是 [actuator.py](/Users/zyyxsth/d1-stairs-up/actuator.py) 里的 `DelayedImplicitActuator`。这个模型继承自 Isaac Lab 的 `ImplicitActuator`，但不再让控制命令在同一物理步立即生效，而是通过 `DelayBuffer` 对关节位置、关节速度和关节力矩三路命令分别施加时延后再送入执行器计算。
+            </p>
+          </div>
+
+          <div class="overview-grid">
+            <div class="info-card">
+              <div class="info-tag">核心改动</div>
+              <h3>引入命令时延</h3>
+              <p>
+                与理想执行器不同，策略输出的控制命令不会立即作用到仿真系统，而是会经过若干个 physics step 的延迟后再被执行。
+              </p>
+            </div>
+
+            <div class="info-card">
+              <div class="info-tag">实现方式</div>
+              <h3>三路指令统一延迟建模</h3>
+              <p>
+                在实现上，关节位置、关节速度和关节力矩分别对应一个 DelayBuffer，因此延迟影响的是完整控制指令，而不是只对单一控制量做近似修正。
+              </p>
+            </div>
+
+            <div class="info-card">
+              <div class="info-tag">随机化</div>
+              <h3>每次重置随机采样延迟</h3>
+              <p>
+                在环境 reset 时，会在 `min_delay` 到 `max_delay` 之间为不同环境随机采样时延。这使训练过程覆盖了不同程度的执行器滞后情况，而不是只适配一个固定响应。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="experiment-group">
+          <div class="group-header">
+            <h3 class="group-title">这一改进对 Sim-to-Real 的意义</h3>
+            <p class="group-text">
+              真实机器人上的电机和底层控制链路天然存在响应延迟。如果训练阶段默认执行器是理想的，策略很容易依赖“命令一发即到”的理想条件；一旦部署到真实系统，就会因为滞后而出现动作节奏错位、接触时机偏差或姿态修正过晚的问题。加入时延执行器建模后，策略从训练阶段就需要适应这种滞后，因此更容易迁移到真实机器人。
+            </p>
+          </div>
+
+          <div class="highlight-box">
+            <p>
+              <strong>改进说明：</strong>这次更新的重点不是简单替换一个电机名字，而是在训练闭环中显式加入了执行器时延。相比原先的理想执行器假设，`DelayedImplicitActuator` 更接近真实硬件中的控制响应特性，因此能让策略在训练阶段就提前适应电机滞后带来的影响。这是缩小 sim-to-real gap 的一个直接工程改进。
+            </p>
+          </div>
         </div>
       </section>
 
