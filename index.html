@@ -843,7 +843,7 @@
           <div class="group-header">
             <h3 class="group-title">从理想执行器到带时延的执行器模型</h3>
             <p class="group-text">
-              当前训练中使用的是 [actuator.py](/Users/zyyxsth/d1-stairs-up/actuator.py) 里的 `DelayedImplicitActuator`。这个模型继承自 Isaac Lab 的 `ImplicitActuator`，但不再让控制命令在同一物理步立即生效，而是通过 `DelayBuffer` 对关节位置、关节速度和关节力矩三路命令分别施加时延后再送入执行器计算。
+              当前训练中使用的是 `DelayedImplicitActuator`。这个模型继承自 Isaac Lab 的 `ImplicitActuator`，但不再让控制命令在同一物理步立即生效，而是通过 `DelayBuffer` 对关节位置、关节速度和关节力矩三路命令分别施加时延后再送入执行器计算。
             </p>
           </div>
 
@@ -1313,6 +1313,49 @@
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="experiment-group">
+          <div class="group-header">
+            <h3 class="group-title">执行器模型更新前后的实机对比</h3>
+            <p class="group-text">
+              下面两段视频对应的是执行器建模更新前后的实机结果。前者使用原先更理想化的执行器设定，后者使用加入 delay 且按转子惯量、自然频率和阻尼比重新设计后的执行器参数。
+            </p>
+          </div>
+
+          <div class="media-grid">
+            <div class="media-card">
+              <div class="media-box">
+                <span class="media-label">Original Actuator</span>
+                <video src="videos/idea_ImplicitActuator_real_demo.mp4" controls muted playsinline loop></video>
+              </div>
+              <div class="media-content">
+                <h4 class="media-title">更新前：理想执行器设定</h4>
+                <p class="media-desc">
+                  该视频对应原先的执行器设定，可作为后续改进版本的参照。这里保留它，是为了展示执行器建模变化对最终实机表现的影响。
+                </p>
+              </div>
+            </div>
+
+            <div class="media-card">
+              <div class="media-box">
+                <span class="media-label">Updated Actuator</span>
+                <video src="videos/update_implicitactuator_real_demo.mp4" controls muted playsinline loop></video>
+              </div>
+              <div class="media-content">
+                <h4 class="media-title">更新后：delay 与参数重设计</h4>
+                <p class="media-desc">
+                  该视频对应加入命令时延，并基于转子惯量、自然频率和阻尼比重新设计执行器参数后的实机结果。它用于说明执行器建模更新后，策略在真实平台上的部署表现。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="highlight-box" style="margin-top: 24px;">
+            <p>
+              <strong>补充说明：</strong>这一组视频主要服务于 Sim-to-Real 工程改进的说明。前面“执行器建模”部分介绍了 delay 和参数设计的原理，这里则给出对应的实机视频结果，方便把建模改动和最终部署效果对应起来看。
+            </p>
           </div>
         </div>
 
