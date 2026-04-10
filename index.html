@@ -872,6 +872,12 @@
               </p>
             </div>
           </div>
+
+          <div class="highlight-box" style="margin-top: 24px;">
+            <p>
+              <strong>转子惯量建模原理：</strong>除了加入命令时延，这里的执行器参数也不是通过简单增大 PD 增益得到的，而是从一个标准二阶系统出发来设计。若把单关节电机近似看作“惯量 + 弹簧 + 阻尼”系统，其闭环形式可写成 `J * q_ddot + D * q_dot + K * q = K * q_ref`，其中 `J` 对应转子惯量（这里用 `ARMATURE` 表示），`K` 是等效刚度，`D` 是等效阻尼。另一方面，标准二阶系统通常写成 `q_ddot + 2 * zeta * omega * q_dot + omega^2 * q = omega^2 * q_ref`。将两式逐项对应，就得到 `K = J * omega^2`、`D = 2 * zeta * J * omega`。因此当设自然频率为 `10 Hz`，即 `omega = 10 x 2pi`，阻尼比取 `2.0` 形成过阻尼响应时，执行器参数自然写成 `STIFFNESS = ARMATURE x omega^2`、`DAMPING = 2 x zeta x ARMATURE x omega`。这样做的意义在于：控制器带宽由 `omega` 决定，响应形态由 `zeta` 决定，而转子惯量 `J` 决定了要实现这组动态特性所需的物理刚度和阻尼量级。相比直接使用一个很大的经验 PD，这种写法对应的是一个有明确动态指标的闭环模型，因此更容易和真实电机的响应速度、阻尼特性以及有限带宽对应起来。
+            </p>
+          </div>
         </div>
 
         <div class="experiment-group">
@@ -884,7 +890,7 @@
 
           <div class="highlight-box">
             <p>
-              <strong>改进说明：</strong>这次更新的重点不是简单替换一个电机名字，而是在训练闭环中显式加入了执行器时延。相比原先的理想执行器假设，`DelayedImplicitActuator` 更接近真实硬件中的控制响应特性，因此能让策略在训练阶段就提前适应电机滞后带来的影响。这是缩小 sim-to-real gap 的一个直接工程改进。
+              <strong>改进说明：</strong>这次更新的重点不只是替换一个电机名字，而是在训练闭环中同时加入了执行器时延和基于转子惯量的参数设计。相比原先的理想执行器假设，这种做法更接近真实硬件中的控制响应特性，因此能让策略在训练阶段就提前适应电机滞后和有限带宽带来的影响。这是缩小 sim-to-real gap 的一个直接工程改进。
             </p>
           </div>
         </div>
